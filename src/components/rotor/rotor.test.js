@@ -1,4 +1,5 @@
 import { render } from "@testing-library/react";
+import { AssertionError } from "assert";
 import { randomInt } from "crypto";
 import { Rotor } from "./rotor"
 import * as rotorbl  from './rotor.bl'
@@ -31,10 +32,26 @@ test("Rotor resets correctly", () =>{
 })
 
 test("Rotor rotation",() => {
-
+    expect(rotorbl.stepRotor(0,1,charsToMap)).toEqual(1) // test increase 
+    expect(rotorbl.stepRotor(charsToMap.length-1,1,charsToMap)).toEqual(0) // test end of rotor case
     
 })
 
-//test("Test correct rotor encryption",{
+test("Test correct rotor encryption",() => {
+    let inputSignal;
+    let charIndexMap = rotorbl.createCharacterIndexMap(0,charsToMap)
+    let encodedSignal;
+    let decodedSignal;
 
-//})
+
+    for(inputSignal = 0; inputSignal < charsToMap.length /2; inputSignal ++ ){
+        for(let rotorOffset = 0; rotorOffset < charsToMap.length / 2; rotorOffset++) {
+            //console.log("Testing: " + inputSignal + " "+ rotorOffset)
+            encodedSignal = rotorbl.propogateSignal(inputSignal,rotorOffset,true,charIndexMap) 
+            decodedSignal = rotorbl.propogateSignal(encodedSignal,rotorOffset,false,charIndexMap)
+            
+            expect(inputSignal).not.toEqual(encodedSignal);
+            expect(decodedSignal).toEqual(inputSignal);
+        }
+    }
+})
