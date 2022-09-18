@@ -8,10 +8,11 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
+            "console": "integratedTerminal",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\experiment\\dist\\index.js",
+            "program": "${workspaceFolder}\\experiment\\dist\\index.ts",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]
