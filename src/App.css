@@ -36,3 +36,56 @@
     transform: rotate(360deg);
   }
 }
+.bordered {
+  border: 5px;
+  border-color: black;
+  border-style: solid;
+}
+
+.controlPanel {
+    background-color: beige;
+    color:black;
+
+
+    
+}
+.controlPanelButton{
+  background-color: brown;
+  margin: 2px;
+}
+
+.display {
+  background-color: black;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  flex-direction: column;
+  color: white;
+  letter-spacing: 4px;
+  text-transform: full-width;
+  width: 100%;
+}
+
+.enigmaMachine {
+  background-color: brown;
+  width: 80%;
+}
+
+.rotorSelectMenu {
+  display: flex;
+  flex-direction: column;
+}
+
+.rotorSelectTable {
+  font-size: large;
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  margin: 5px;
+
+}
+.rotorSelectTableElement {
+  padding:2px;
+  border:2px
+}
+
