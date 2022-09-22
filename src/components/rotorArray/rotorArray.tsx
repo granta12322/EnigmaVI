@@ -2,19 +2,24 @@ import { render } from "@testing-library/react";
 import React, {useState} from "react";
 import { getValuesOfKeyFromArray } from "../../helpers/collections";
 import { Rotor, RotorProps } from "../rotor/rotor";
-import { stepRotorsHook } from "./rotorArray.bl";
+import  "./rotorArray.css";
+//import { stepRotorsHook } from "./rotorArray.bl";
 
 
 
 
 // !!! To do: learn how generics work so I can write this as 
-export interface RotorArray {
+export interface RotorArrayProps {
     rotorArray: Array<RotorProps>;
+    reflector: RotorProps;
+    charactersToMap: Array<string>;
+    stepRotorsHook: Function
+    offset: Array<nu
 }
 
 
 
-export function RotorArray({rotorArray}: RotorArray ) {
+export function RotorArray({rotorArray}: RotorArrayProps ) {
     /**
      * Offset: How many steps a rotor has moved from its initial position
      * Position: Where a rotor starts out - remains constant. The real position of a rotor is its position + offset
@@ -30,22 +35,22 @@ export function RotorArray({rotorArray}: RotorArray ) {
         setRotorOffsets(initialOffsets)
     }
 
-    function stepRotors() {
-        stepRotorsHook(rotorOffsets,rotorArray[0].charactersToMap.length) // Should be from the RotorArray
-    }
+    const stepRotorsHook = (rotors: Array<RotorProps>, rotorSize: number): void => {
+        const stepSize: number = 1;
+        for(let rotor of rotors) {
+            rotor.stepRotor()
+            if (rotor.position != 0) break;  // Rotate next rotor only when start of preceeding is reached.
+        };
+    };
     return (
-        <>
+        <div className="rotorArray bordered">
         {rotorArray.map((rotor) => 
-        <>
-            <Rotor rotorNumber={rotor.rotorNumber} 
-                    position={rotor.position}
-                    charactersToMap={rotor.charactersToMap}
-            />
+        
             <Rotor {...rotor}   // !!! Deserialise like this
             />
             
-        </>
+        
         )}
-        </>
+        </div>
         );
 }

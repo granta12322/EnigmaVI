@@ -3,6 +3,13 @@ import { deepCopy, randIntBetween, mod } from "../../helpers/math";
 const LEFT_LETTER_POSITION: number = 0;
 const RIGHT_LETTER_POSITION: number = 1;
 
+export const buildRotor = (rotorNumber: number, charactersToMap: Array<string>) => {
+    //console.log("Building rotor with chars: " +charactersToMap)
+    return createCharacterIndexMap(rotorNumber, charactersToMap)
+}
+
+
+
 export function createCharacterIndexMap(rotorNumber: number, characters: Array<string>): Array<Array<number>> {
 
     const letterCount: number = characters.length;
@@ -113,8 +120,10 @@ export function createCharacterIndexMapBackUp(rotorNumber: number, characters: A
 
 };
 
-export function stepRotor(position: number, stepSize: number = 1, charactersToMap: Array<string>): number  {
-    return (position + stepSize) % charactersToMap.length -1
+export function stepRotor(position: number, stepSize: number = 1, rotorSize: number): number  {
+    //console.log(position + stepSize)
+    //console.log("step result:" + ((position + stepSize) % (rotorSize -1)))
+    return (position + stepSize) % (rotorSize -1)
 }
 
 export function resetRotor(currentRotorOffset: number) {
@@ -131,11 +140,13 @@ export function propogateSignal(inputPosition: number,
     let modSize = rotorMapping[0].length;
 
     let passRotorMap = isFirstPass ? rotorMapping[0] : rotorMapping[1]
-    
+    //console.log("Rotor char map:" + passRotorMap)
     let netPositionInRotor = mod(inputPosition - currentRotorOffset, modSize)
+    console.log("NPIR: " + netPositionInRotor)
     //console.log("Here:" + (inputPosition - currentRotorOffset))
     //console.log("There:" + mod(inputPosition - currentRotorOffset,modSize) )
     let positionChange  = passRotorMap[netPositionInRotor]
+    console.log("Subtracting: "+positionChange)
 
     let outputRotorLocation = mod(netPositionInRotor + positionChange,modSize)
     
@@ -150,5 +161,4 @@ export function propogateSignal(inputPosition: number,
     //console.log("orl:"  + outputRotorLocation)
     //console.log(outputSignalPosition)
     return outputSignalPosition
-	return outputSignalPosition
 };
