@@ -10,7 +10,7 @@ import {buildRotor} from './components/rotor/rotor.bl'
 import { getValuesOfKeyFromArray } from './helpers/collections';
 
 let charsToMap = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-charsToMap = charsToMap.slice(0,6)
+//charsToMap = charsToMap.slice(0,6)
 let characterRows = [
   ['Q','W','E','R','T','Y','U','I','O','P'],
   ['A','S','D','F','G','H','J','K','L'],
@@ -40,7 +40,8 @@ let defaultRotorArray = {
       charsToMap: charsToMap,
       charecterMap: buildRotor(-1, charsToMap)
     },
-  charactersToMap:charsToMap
+  charactersToMap:charsToMap,
+  offsets:[0,0]
   
 }
 console.log()
@@ -50,17 +51,28 @@ function App() {
   const [output, setOutput] = useState("")
   
   const [rotorSelection, setRotorSelection] = useState(defaultRotorArray)
-  const [rotorPositions, setRotorPositions] = useState([0,0])
+
+  const initialOffsets = rotorSelection.rotorArray.map(element => 0)
+  const [rotorOffsets, setRotorOffsets] = useState(initialOffsets)
+
+  //console.log("Offsets:" + rotorOffsets)
+
   const handleKeyPress = (inputChar) => {
 
     setInput(input + inputChar)
     setOutput(output + encodeLetter(rotorSelection,inputChar))
-    console.log(rotorSelection.rotorArray["position"])
 
-    setRotorSelection(stepRotorsHook2(rotorSelection,charsToMap.length))
+    //console.log("Rotors in:" + rotorOffsets)
+    setRotorOffsets(stepRotorsHook2(rotorOffsets,charsToMap.length))
+    //console.log("Rotors out: " + rotorOffsets)
   }
 
-  const reset
+  const resetOffsets = () => {
+    //console.log("Current offsets: " + rotorOffsets)
+    //console.log("Initial offsets: " + initialOffsets)
+    setRotorOffsets(initialOffsets)
+    //console.log("New offsetsd:" + rotorOffsets)
+  }
 
   const clearDisplay = () =>
   {
@@ -88,10 +100,15 @@ function App() {
           </div>
         </div>
         <div style = {{display:"flex", "flex-direction":"row"}}>
-            <RotorArray {...rotorSelection}/>
+            <RotorArray 
+              rotorArray={rotorSelection.rotorArray}
+              reflector={rotorSelection.reflector}
+              charactersToMap={charsToMap}
+              offsets={rotorOffsets}
+            />
           <div className='controlPanel bordered'>
             <h3 style = {{paddingTop:"3px"}}>Control Panel</h3>
-            <div className='controlPanelButton bordered'>Reset Rotors</div>
+            <div className='controlPanelButton bordered' onClick={resetOffsets}>Reset Rotors</div>
             <div className='controlPanelButton bordered'>Choose Rotors</div>
             <div className='controlPanelButton bordered' onClick={clearDisplay}>Clear Message</div> 
           </div>

@@ -25,7 +25,7 @@ export function KeyBoard(props: KeyBoardProps) {
   }
   
 
-  function KeyBoardRow(props:KeyBoardRowProps) {
+  function KeyBoardRow(props: KeyBoardRowProps) {
     //console.log("Chars:" + props.characters)
     return (
       <div  className='keyBoardRow'>
