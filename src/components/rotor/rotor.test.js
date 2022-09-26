@@ -49,9 +49,11 @@ test("Test correct rotor encryption",() => {
             //console.log("Testing: " + inputSignal + " "+ rotorOffset)
             encodedSignal = rotorbl.propogateSignal(inputSignal,rotorOffset,true,charIndexMap) 
             decodedSignal = rotorbl.propogateSignal(encodedSignal,rotorOffset,false,charIndexMap)
-            
+            console.log(inputSignal +","+ encodedSignal+ "," + decodedSignal)
             expect(inputSignal).not.toEqual(encodedSignal);
             expect(decodedSignal).toEqual(inputSignal);
         }
     }
+
+    
 })

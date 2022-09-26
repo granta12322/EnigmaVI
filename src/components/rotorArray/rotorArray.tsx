@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import React, {useState} from "react";
 import { getValuesOfKeyFromArray } from "../../helpers/collections";
 import { Rotor, RotorProps } from "../rotor/rotor";
+import { zip } from "../../helpers/collections";
 import  "./rotorArray.css";
 //import { stepRotorsHook } from "./rotorArray.bl";
 
@@ -13,13 +14,13 @@ export interface RotorArrayProps {
     rotorArray: Array<RotorProps>;
     reflector: RotorProps;
     charactersToMap: Array<string>;
-    stepRotorsHook: Function
-    offset: Array<nu
+    stepRotorsHook: Function;
+    offsets: Array<number>
 }
 
 
 
-export function RotorArray({rotorArray}: RotorArrayProps ) {
+export function RotorArray(rotorArray: RotorArrayProps ) {
     /**
      * Offset: How many steps a rotor has moved from its initial position
      * Position: Where a rotor starts out - remains constant. The real position of a rotor is its position + offset
@@ -28,29 +29,23 @@ export function RotorArray({rotorArray}: RotorArrayProps ) {
      *              By contrast index referes to the position within the alphabet.
      * 
      */
-    const initialOffsets: Array<0> = rotorArray.map(element => 0)
-    const [rotorOffsets, setRotorOffsets] = useState(initialOffsets)
-    
-    const resetRotor = () => {
-        setRotorOffsets(initialOffsets)
-    }
 
-    const stepRotorsHook = (rotors: Array<RotorProps>, rotorSize: number): void => {
-        const stepSize: number = 1;
-        for(let rotor of rotors) {
-            rotor.stepRotor()
-            if (rotor.position != 0) break;  // Rotate next rotor only when start of preceeding is reached.
-        };
-    };
+    //const initialOffsets: Array<0> = rotorArray.offsets.map(element => 0)
+    //const [rotorOffsets, setRotorOffsets] = useState(rotorArray.offsets)
+    
+    
+    //<Rotor {...rotor} />  // ? Deserialise props like this
+    let rotorsAndOffsets = zip(rotorArray.rotorArray,rotorArray.offsets)
     return (
         <div className="rotorArray bordered">
-        {rotorArray.map((rotor) => 
-        
-            <Rotor {...rotor}   // !!! Deserialise like this
-            />
-            
-        
-        )}
+        {rotorsAndOffsets.map((rotor:Array<any>, index: number) => {
+            //console.log("RAO:" + rotor[0]["position"])
+            //console.log(rotor[1].toString())
+        rotor[0]["position"] = rotor[1]
+
+        return <Rotor  {...rotor[0]} index= {index}
+        />
+    })}
         </div>
         );
 }
