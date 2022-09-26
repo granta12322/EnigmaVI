@@ -23,3 +23,5 @@ export function reindexArray(array: Array<any>,indexChange: number)  {
     }
     return newArray
 }
+
+export const zip = (a: any, b: any) => a.map((k: any, i: any) => [k, b[i]]);
