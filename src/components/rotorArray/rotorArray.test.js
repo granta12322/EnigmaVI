@@ -1,3 +1,4 @@
+
 import { stepRotor, createCharacterIndexMap} from '../rotor/rotor.bl'
 import {stepRotorsHook, resetRotorArray, encodeLetter} from './rotorArray.bl'
 import * as rotorbl  from '../rotor/rotor.bl'
@@ -85,3 +86,4 @@ test("Rotor Array encrypts correctly", () =>{
 
 
 })
+

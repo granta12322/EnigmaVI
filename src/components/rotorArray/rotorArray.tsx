@@ -1,3 +1,4 @@
+
 import { render } from "@testing-library/react";
 import React, {useState} from "react";
 import { getValuesOfKeyFromArray } from "../../helpers/collections";
@@ -48,4 +49,4 @@ export function RotorArray(rotorArray: RotorArrayProps ) {
     })}
         </div>
         );
-}
+    }
