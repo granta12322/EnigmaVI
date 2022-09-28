@@ -23,12 +23,12 @@ export function Rotor(rotor: RotorProps) {
     //console.log(rotor.position)
     //console.log(rotor.charecterMap[0])
     //console.log(reindexArray(rotor.charecterMap[0],rotor.position))
-
+    const  rotorSegmentsToShow: number  = 6
     
     return(
         <table className='rotor'>
             <th>{rotor.index}s</th>
-            {reindexArray(rotor.charecterMap,rotor.position).map( (letterIndexPair: number, index: number) => {
+            {reindexArray(rotor.charecterMap,rotor.position).slice(0,rotorSegmentsToShow).map( (letterIndexPair: number, index: number) => {
                 //console.log("LetterIndex Pair:" + letterIndexPair)
                 return(
                 <tr key = {index}>
