@@ -1,0 +1,28 @@
+.keyBoard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.keyBoardRow {
+  display: flex;
+  justify-content: center;
+}
+
+
+
+.keyBoardKey {
+    color: white;
+    border: 2px;
+    display: flex;
+    background-color: black;
+    border-radius: 100%;
+    height: 50px;
+    font-size: 100%;
+    margin-right: 2%;
+    margin-left: 2%;
+    justify-content: center;
+    aspect-ratio: 1/1;
+    border-style: solid;
+    border-color: black;
+}

@@ -1,27 +1,52 @@
-import { Rotor } from "../rotor/rotor"
 
-interface RotorArrayProp {
-    rotors: Array<Array<number>>,
-    charactersToMap: Array<string>
+import { render } from "@testing-library/react";
+import React, {useState} from "react";
+import { getValuesOfKeyFromArray } from "../../helpers/collections";
+import { Rotor, RotorProps } from "../rotor/rotor";
+import { zip } from "../../helpers/collections";
+import  "./rotorArray.css";
+//import { stepRotorsHook } from "./rotorArray.bl";
+
+
+
+
+// !!! To do: learn how generics work so I can write this as 
+export interface RotorArrayProps {
+    rotorArray: Array<RotorProps>;
+    reflector: RotorProps;
+    charactersToMap: Array<string>;
+    stepRotorsHook: Function;
+    offsets: Array<number>
 }
 
-export function RotorArray({rotors, charactersToMap}: RotorArrayProp) {
 
-    const encryptCharacter = (character: string) => {
 
-    }
+export function RotorArray(rotorArray: RotorArrayProps ) {
+    /**
+     * Offset: How many steps a rotor has moved from its initial position
+     * Position: Where a rotor starts out - remains constant. The real position of a rotor is its position + offset
+     * signal: The location in space of of the signal. 
+     *              If the input letter is A and htere is an offset of 2 then the signal travels through position 2.
+     *              By contrast index referes to the position within the alphabet.
+     * 
+     */
 
-    const resetRotors = () => {
-
-    }
-
+    //const initialOffsets: Array<0> = rotorArray.offsets.map(element => 0)
+    //const [rotorOffsets, setRotorOffsets] = useState(rotorArray.offsets)
     
+    
+    //<Rotor {...rotor} />  // ? Deserialise props like this
+    let rotorsAndOffsets = zip(rotorArray.rotorArray,rotorArray.offsets)
+    return (
+        <div className="rotorArray bordered">
+        {rotorsAndOffsets.map((rotor:Array<any>, index: number) => {
+            //console.log("RAO:" + rotor[0]["position"])
+            //console.log(rotor[1].toString())
+        rotor[0]["position"] = rotor[1]
 
-    return(
-        <div>
-            {rotors.map( (rotor: Array<number>) =>
-            <Rotor rotorNumber = {rotor[0]} initialOffset = {rotor[1]} charactersToMap = {charactersToMap}/>
-            )}   
+        return <Rotor  {...rotor[0]} index= {index}
+        />
+    })}
         </div>
-    )
-}
+        );
+    }

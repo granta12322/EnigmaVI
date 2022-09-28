@@ -1,37 +1,41 @@
 import React, {useState} from 'react'
 import * as rotorbl  from './rotor.bl'
-
-
-type RotorProp =  {
+import {mod} from '../../helpers/math'
+import { positionToChar } from '../../helpers/misc'
+import { reindexArray } from '../../helpers/collections'
+export interface RotorProps {
     rotorNumber: number,
-    initialOffset: number,
-    charactersToMap: Array<string>
+    position: number,
+    charactersToMap: Array<string>,
+    charecterMap: Array<number>,
+    stepRotor: Function,
+    index: number
 }
 
-export function Rotor({rotorNumber, initialOffset, charactersToMap}: RotorProp) {
-    const [letterIndexMap, setLetterIndexMap] = useState([[0],[0]])
-    const [position, setPosition] = useState(0)
+export const buildRotor = (rotorNumber: number, charactersToMap: Array<string>) => {
+    return rotorbl.createCharacterIndexMap(rotorNumber, charactersToMap)
+}
 
-    const buildRotor = (rotorNumber: number, charactersToMap: Array<string>) => {
-        setLetterIndexMap(rotorbl.createCharacterIndexMap(rotorNumber, charactersToMap))
-    }
+export function Rotor(rotor: RotorProps) {
+    const [letterIndexMap, setLetterIndexMap] = useState([[0,0]])
+    const [offset, setOffset] = useState(0)
+    
+    //console.log(rotor.position)
+    //console.log(rotor.charecterMap[0])
+    //console.log(reindexArray(rotor.charecterMap[0],rotor.position))
 
-    const stepRotor = () => {
-        setPosition( rotorbl.stepRotor(position, charactersToMap))
-    }
-
-    const resetRotor = () => {
-        setPosition()
-    }
     
     return(
-        <table>
-            {letterIndexMap.map( (letterIndexPair: Array<number>, index: number) => 
+        <table className='rotor'>
+            <th>{rotor.index}s</th>
+            {reindexArray(rotor.charecterMap,rotor.position).map( (letterIndexPair: number, index: number) => {
+                //console.log("LetterIndex Pair:" + letterIndexPair)
+                return(
                 <tr key = {index}>
-                    <td key = {index as unknown as string + '_0'}>{letterIndexPair[0]}</td>
-                    <td key = {index as unknown as string + '_1'}>{letterIndexPair[1]}</td>
+                    <td key = {index as unknown as string + '_0'}>{(index + rotor.position) % rotor.charecterMap.length}</td>
                 </tr>
                 )
+            })
             }
         </table>
     )
