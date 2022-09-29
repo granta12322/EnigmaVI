@@ -1,13 +1,15 @@
 
 import './App.css';
 import { Rotor } from './components/rotor/rotor';
+import { RotorSelectMenu } from './components/controlPanel/RotorSelectMenu';
 import { RotorArray } from './components/rotorArray/rotorArray';
 import { encodeLetter } from './components/rotorArray/rotorArray.bl';
 import {KeyBoard} from './components/keyboard/keyBoard'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { stepRotorsHook2 } from './components/rotorArray/rotorArray.bl';
 import {buildRotor} from './components/rotor/rotor.bl'
-import { getValuesOfKeyFromArray } from './helpers/collections';
+import { getValuesOfKeyFromArray, zip } from './helpers/collections';
+
 
 let charsToMap = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 //charsToMap = charsToMap.slice(0,6)
@@ -44,7 +46,6 @@ let defaultRotorArray = {
   offsets:[0,0]
   
 }
-console.log()
 
 function App() {
   const [input, setInput] = useState("")
@@ -55,8 +56,8 @@ function App() {
   const initialOffsets = rotorSelection.rotorArray.map(element => 0)
   const [rotorOffsets, setRotorOffsets] = useState(initialOffsets)
 
+  const [rotorSelectIsOpen,setRotorSelectIsOpen] = useState(0)
   //console.log("Offsets:" + rotorOffsets)
-
   const handleKeyPress = (inputChar) => {
 
     setInput(input + inputChar)
@@ -66,6 +67,9 @@ function App() {
     setRotorOffsets(stepRotorsHook2(rotorOffsets,charsToMap.length))
     //console.log("Rotors out: " + rotorOffsets)
   }
+
+  const toggleRotorMenu = () => setRotorSelectIsOpen(! rotorSelectIsOpen)
+  
 
   const resetOffsets = () => {
     //console.log("Current offsets: " + rotorOffsets)
@@ -109,40 +113,26 @@ function App() {
           <div className='controlPanel bordered'>
             <h3 style = {{paddingTop:"3px"}}>Control Panel</h3>
             <div className='controlPanelButton bordered' onClick={resetOffsets}>Reset Rotors</div>
-            <div className='controlPanelButton bordered'>Choose Rotors</div>
+            <div className='controlPanelButton bordered' onClick = {toggleRotorMenu}>Choose Rotors</div>
             <div className='controlPanelButton bordered' onClick={clearDisplay}>Clear Message</div> 
           </div>
         </div>
         <KeyBoard   characterRows={characterRows} handleKeyPress = {(character) =>handleKeyPress(character)}// ? Infinite loop error: Pass as an arrow function to prevent infinite rende rloop issue } 
-        />
+        />      
+      </div>
       
-      </div>
-      <div className='rotorSelectMenu bordered'>
-        
-        <div className='rotorSelectTable'>
-          <div className='rotorSelectTableElement bordered'>
-            <div>Rotor</div>
-            <div>1</div>
-          </div>
-          
-          <div className='rotorSelectTableElement bordered'>
-            <div>Rotor Number</div>
-            <div>1</div>
-          </div>
-          <div className='rotorSelectTableElement bordered'>
-            <div>Rotor Offset</div>
-            <div>2</div>
-          </div>
-        </div>
-        <div flex><div>-</div>
-        <div>+</div></div>
-        
+{
+rotorSelectIsOpen
+?       <RotorSelectMenu    />
 
-      </div>
-      </header>
+: null
+}      </header>
     </div>
   );
 }
 
+
 export default App;
 
+  
+  
