@@ -27,7 +27,7 @@ export function Rotor(rotor: RotorProps) {
     
     return(
         <table className='rotor'>
-            <th>{rotor.index}s</th>
+            <th>{rotor.index}</th>
             {reindexArray(rotor.charecterMap,rotor.position).slice(0,rotorSegmentsToShow).map( (letterIndexPair: number, index: number) => {
                 //console.log("LetterIndex Pair:" + letterIndexPair)
                 return(
