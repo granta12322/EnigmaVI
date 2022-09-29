@@ -21,7 +21,7 @@ export function createCharacterIndexMap(rotorNumber: number, characters: Array<s
     let alreadyChosenIndexes: Array<number> = [];
     
     let i: number = 0;
-    console.log("Creating Rotor Map")
+    //console.log("Creating Rotor Map")
     for (let i: number = 0; i < letterCount; i++) {   
         //@ts-ignore
         let outputIndex = selectIndexPair(i, availableOutputs) ;
@@ -36,7 +36,7 @@ export function createCharacterIndexMap(rotorNumber: number, characters: Array<s
 
     
      
-    console.log("Charmap:" + letterMapping)
+    //console.log("Charmap:" + letterMapping)
     //console.log("Charmap sum: " + letterMapping.reduce((partialSum,a) => partialSum + a))
 
 
