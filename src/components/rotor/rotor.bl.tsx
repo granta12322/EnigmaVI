@@ -3,11 +3,6 @@ import { deepCopy, randIntBetween, mod } from "../../helpers/math";
 const LEFT_LETTER_POSITION: number = 0;
 const RIGHT_LETTER_POSITION: number = 1;
 
-export const buildRotor = (rotorNumber: number, charactersToMap: Array<string>) => {
-    //console.log("Building rotor with chars: " +charactersToMap)
-    return createCharacterIndexMap(rotorNumber, charactersToMap)
-}
-
 
 
 export function createCharacterIndexMap(rotorNumber: number, characters: Array<string>): Array<number> {
