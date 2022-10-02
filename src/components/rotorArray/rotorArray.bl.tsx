@@ -57,7 +57,7 @@ export function encodeLetter(rotorArray: RotorArrayProps, inputLetter: string) {
         3: 4,
         4: 3
     }
-    const reflect = (signal: number): number =>  rotorArray.charactersToMap.length - signalAfterFirstPass
+    const reflect = (signal: number): number =>  rotorArray.charactersToMap.length - signal
 
     //@ts-ignore
     let signalAfterReflector: number = reflect(signalAfterFirstPass)
@@ -71,7 +71,7 @@ export function encodeLetter(rotorArray: RotorArrayProps, inputLetter: string) {
         //console.log("Performing Encryption pass")
         //console.log(rotors)
         console.log(isFirstPass ? "First Pass-----------------" : "Second Pass--------------")
-
+        console.log("Rotors:" + rotors)
         for (let rotor of isFirstPass ? rotors : rotors.slice().reverse()) {
             console.log("Character Map:" + rotor.charecterMap)
             

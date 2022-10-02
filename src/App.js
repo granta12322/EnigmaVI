@@ -1,14 +1,15 @@
 
 import './App.css';
-import { Rotor } from './components/rotor/rotor';
+import { Rotor, RotorProps } from './components/rotor/rotor';
 import { RotorSelectMenu } from './components/controlPanel/RotorSelectMenu';
 import { RotorArray } from './components/rotorArray/rotorArray';
 import { encodeLetter } from './components/rotorArray/rotorArray.bl';
 import {KeyBoard} from './components/keyboard/keyBoard'
 import React, {useState, useEffect} from 'react'
 import { stepRotorsHook2 } from './components/rotorArray/rotorArray.bl';
-import {buildRotor} from './components/rotor/rotor.bl'
+import {createCharacterIndexMap, stepRotor} from './components/rotor/rotor.bl'
 import { getValuesOfKeyFromArray, zip } from './helpers/collections';
+import { isParameter } from 'typescript';
 
 
 let charsToMap = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
@@ -27,73 +28,116 @@ let defaultRotorArray = {
       rotorNumber:1,
       position:0,
       charsToMap: charsToMap,
-      charecterMap: buildRotor(1, charsToMap)
+      charecterMap: createCharacterIndexMap(1, charsToMap)
     },
     {
       rotorNumber:2,
       position:0,
       charsToMap: charsToMap,
-      charecterMap: buildRotor(2, charsToMap)
+      charecterMap: createCharacterIndexMap(2, charsToMap)
     }
   ],
   reflector: {
       rotorNumber:-1,
       position:0,
       charsToMap: charsToMap,
-      charecterMap: buildRotor(-1, charsToMap)
+      charecterMap: createCharacterIndexMap(-1, charsToMap)
     },
   charactersToMap:charsToMap,
   offsets:[0,0]
   
 }
 
+/**
+ * rotorNumber: number on rotor used to seed char map
+ * rotorIndex: position of rotor in array
+ * rotorPosition: rotor position change from original offset
+ * rotorOffset: initial rotor offset
+ * @returns 
+ */
 function App() {
+
+
+
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
   
-  const [rotorSelection, setRotorSelection] = useState(defaultRotorArray)
-
-  const initialOffsets = rotorSelection.rotorArray.map(element => 0)
-  const [rotorOffsets, setRotorOffsets] = useState(initialOffsets)
-
   const [rotorSelectIsOpen,setRotorSelectIsOpen] = useState(0)
-  //console.log("Offsets:" + rotorOffsets)
-  const handleKeyPress = (inputChar) => {
+  
+  const [initialOffsets, setInitialOffsets] = useState([0])
 
-    setInput(input + inputChar)
-    setOutput(output + encodeLetter(rotorSelection,inputChar))
 
-    //console.log("Rotors in:" + rotorOffsets)
-    setRotorOffsets(stepRotorsHook2(rotorOffsets,charsToMap.length))
-    //console.log("Rotors out: " + rotorOffsets)
+  const [rotorArray, setRotorArray] = useState(defaultRotorArray)
+
+  console.log("Here")
+  console.log(rotorArray.offsets)
+
+
+  const buildRotorArray = (rotorNumbers, initialOffsets) => {
+    let charsToMap = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    //.console.log("Calling " + arguments.callee.toString())
+    console.log("Calling buildRotorArray")
+    console.log(rotorNumbers, initialOffsets)
+    let rotors = [];
+     for(let rotorNumber of rotorNumbers)  {
+        console.log("Building individual rotor")
+
+        let rotorCharMap = createCharacterIndexMap(Number(rotorNumber),charsToMap)
+        console.log(rotorCharMap)
+        let rotor = {
+          rotorNumber: rotorNumber,
+          position: 0,
+          charsToMap: charsToMap,
+          charecterMap: rotorCharMap
+        }
+        rotors.push(rotor)
+        console.log(rotor)
+      }
+    console.log("Rotors:")
+    console.log(rotors)
+
+      let rotorArray = {
+        rotorArray:rotors,
+        reflector:  {
+          rotorNumber:-1,
+          position:0,
+          charsToMap: charsToMap,
+          charecterMap: createCharacterIndexMap(-1, charsToMap)
+        },
+        charactersToMap: charsToMap,
+        offsets :initialOffsets
+      }
+    console.log("Output of buildRotorArray:")
+    console.log(rotorArray)
+     setRotorArray(rotorArray)
   }
+
+  const handleKeyPress = (inputChar) => {
+    console.log("Handlign key press")
+    console.log(rotorArray.rotorArray)
+    setInput(input + inputChar)
+
+    setOutput(output + encodeLetter(rotorArray,inputChar))
+
+    setInitialOffsets(stepRotorsHook2(rotorArray.rotorOffsets,charsToMap.length))
+    stepRotor()
+  }
+
 
   const toggleRotorMenu = () => setRotorSelectIsOpen(! rotorSelectIsOpen)
   
 
-  const resetOffsets = () => {
-    //console.log("Current offsets: " + rotorOffsets)
-    //console.log("Initial offsets: " + initialOffsets)
-    setRotorOffsets(initialOffsets)
-    //console.log("New offsetsd:" + rotorOffsets)
-  }
+  const resetOffsets = () => setInitialOffsets(initialOffsets)
 
-  const clearDisplay = () =>
-  {
-    setInput("")
-    setOutput("")
-  }
-  //setOutput("CBA")
-  
-  //[switchBoard, setSwitchBoard] = useState([[""]])
-  
 
+  const clearDisplay = () => {setInput("");setOutput("")};
+
+  
   return (
     <div className="App">
       <header className="App-header">
       <div className='enigmaMachine bordered'
-           characterrows = {characterRows}
-           
+           characterrows = {characterRows} 
         >
         <div className='display' >
           <div className='display' >
@@ -104,11 +148,11 @@ function App() {
           </div>
         </div>
         <div style = {{display:"flex", "flex-direction":"row"}}>
-            <RotorArray 
-              rotorArray={rotorSelection.rotorArray}
-              reflector={rotorSelection.reflector}
-              charactersToMap={charsToMap}
-              offsets={rotorOffsets}
+           <RotorArray 
+              rotorArray={rotorArray.rotorArray}
+              reflector={rotorArray.reflector}
+              charactersToMap={rotorArray.charactersToMap}
+              offsets={rotorArray.offsets}
             />
           <div className='controlPanel bordered'>
             <h3 style = {{paddingTop:"3px"}}>Control Panel</h3>
@@ -117,13 +161,14 @@ function App() {
             <div className='controlPanelButton bordered' onClick={clearDisplay}>Clear Message</div> 
           </div>
         </div>
-        <KeyBoard   characterRows={characterRows} handleKeyPress = {(character) =>handleKeyPress(character)}// ? Infinite loop error: Pass as an arrow function to prevent infinite rende rloop issue } 
+        <KeyBoard   characterRows={characterRows} handleKeyPress = {handleKeyPress}// ? Infinite loop error: Pass as an arrow function to prevent infinite rende rloop issue } 
         />      
       </div>
       
 {
+
 rotorSelectIsOpen
-?       <RotorSelectMenu    />
+?       <RotorSelectMenu  buildRotorArray={buildRotorArray} />
 
 : null
 }      </header>
