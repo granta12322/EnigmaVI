@@ -93,7 +93,7 @@ export function encodeLetter(rotorArray: RotorProps[], inputLetter: string) {
         for (let rotor of isFirstPass ? rotorArray : rotorArray.slice().reverse()) {
             //console.log("Character Map:" + rotor.charecterMap)
             
-            signal = propogateSignal(signal, rotor.position, isFirstPass, rotor.characterMap);
+            signal = propogateSignal(signal, rotor.position - rotor.offset, isFirstPass, rotor.characterMap);
         }
         return signal
     }
