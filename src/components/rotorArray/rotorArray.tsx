@@ -21,7 +21,7 @@ export interface RotorArrayProps {
 
 
 
-export function RotorArray(rotorArray: RotorArrayProps ) {
+export function RotorArray({rotorArray, offsets}: RotorArrayProps ) {
     /**
      * Offset: How many steps a rotor has moved from its initial position
      * Position: Where a rotor starts out - remains constant. The real position of a rotor is its position + offset
@@ -36,7 +36,10 @@ export function RotorArray(rotorArray: RotorArrayProps ) {
     
     
     //<Rotor {...rotor} />  // ? Deserialise props like this
-    let rotorsAndOffsets = zip(rotorArray.rotorArray,rotorArray.offsets)
+    console.log("Rendering Rotor Array")
+    console.log(rotorArray)
+    console.log(offsets)
+    let rotorsAndOffsets = zip(rotorArray,offsets)
     return (
         <div className="rotorArray bordered">
         {rotorsAndOffsets.map((rotor:Array<any>, index: number) => {

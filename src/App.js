@@ -3,13 +3,14 @@ import './App.css';
 import { Rotor, RotorProps } from './components/rotor/rotor';
 import { RotorSelectMenu } from './components/controlPanel/RotorSelectMenu';
 import { RotorArray } from './components/rotorArray/rotorArray';
-import { encodeLetter } from './components/rotorArray/rotorArray.bl';
+import { encodeLetter, stepRotorsHook3 } from './components/rotorArray/rotorArray.bl';
 import {KeyBoard} from './components/keyboard/keyBoard'
 import React, {useState, useEffect} from 'react'
-import { stepRotorsHook2 } from './components/rotorArray/rotorArray.bl';
+
 import {createCharacterIndexMap, stepRotor} from './components/rotor/rotor.bl'
 import { getValuesOfKeyFromArray, zip } from './helpers/collections';
 import { isParameter } from 'typescript';
+import { deepCopy } from './helpers/math';
 
 
 let charsToMap = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
@@ -69,8 +70,7 @@ function App() {
 
   const [rotorArray, setRotorArray] = useState(defaultRotorArray)
 
-  console.log("Here")
-  console.log(rotorArray.offsets)
+
 
 
   const buildRotorArray = (rotorNumbers, initialOffsets) => {
@@ -79,13 +79,13 @@ function App() {
     console.log("Calling buildRotorArray")
     console.log(rotorNumbers, initialOffsets)
     let rotors = [];
-     for(let rotorNumber of rotorNumbers)  {
+     for(let rotorSetup of zip(rotorNumbers, initialOffsets) )  {
         console.log("Building individual rotor")
 
-        let rotorCharMap = createCharacterIndexMap(Number(rotorNumber),charsToMap)
+        let rotorCharMap = createCharacterIndexMap(Number(rotorSetup[0]),charsToMap)
         console.log(rotorCharMap)
         let rotor = {
-          rotorNumber: rotorNumber,
+          rotorNumber: rotorSetup[0],
           position: 0,
           charsToMap: charsToMap,
           charecterMap: rotorCharMap
@@ -109,18 +109,29 @@ function App() {
       }
     console.log("Output of buildRotorArray:")
     console.log(rotorArray)
-     setRotorArray(rotorArray)
+    setRotorArray(rotorArray)
   }
 
   const handleKeyPress = (inputChar) => {
     console.log("Handlign key press")
-    console.log(rotorArray.rotorArray)
+    
     setInput(input + inputChar)
 
     setOutput(output + encodeLetter(rotorArray,inputChar))
 
-    setInitialOffsets(stepRotorsHook2(rotorArray.rotorOffsets,charsToMap.length))
-    stepRotor()
+    console.log("rotor Array before:")
+    console.log(rotorArray.rotorArray)
+    let newRotorArrayTest = stepRotorsHook3(rotorArray.rotorArray,charsToMap.length)
+    console.log("rotor Array after:")
+    console.log(newRotorArrayTest)
+    let newRotorArray = {...rotorArray,rotorArray:newRotorArrayTest}
+    console.log(newRotorArray.rotorArray)
+   // newRotorArray.rotorArray = rotors
+    console.log(newRotorArray.rotorArray)
+
+    setRotorArray(newRotorArray)
+    
+    
   }
 
 
