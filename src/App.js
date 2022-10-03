@@ -3,7 +3,7 @@ import './App.css';
 import { Rotor, RotorProps } from './components/rotor/rotor';
 import { RotorSelectMenu } from './components/controlPanel/RotorSelectMenu';
 import { RotorArray } from './components/rotorArray/rotorArray';
-import { encodeLetter, stepRotorsHook3 } from './components/rotorArray/rotorArray.bl';
+import { encodeLetter, stepRotorsHook4, stepRotorsHook2, resetRotors, resetPositions } from './components/rotorArray/rotorArray.bl';
 import {KeyBoard} from './components/keyboard/keyBoard'
 import React, {useState, useEffect} from 'react'
 
@@ -23,31 +23,21 @@ let characterRows = [
 
 
 
-let defaultRotorArray = {
-  rotorArray: [
+let defaultRotorArray =  [
     {
-      rotorNumber:1,
+
       position:0,
-      charsToMap: charsToMap,
-      charecterMap: createCharacterIndexMap(1, charsToMap)
+      offset: 0,
+      characterMap: createCharacterIndexMap(1, charsToMap)
     },
     {
-      rotorNumber:2,
+
       position:0,
-      charsToMap: charsToMap,
-      charecterMap: createCharacterIndexMap(2, charsToMap)
+      offset: 0,
+      characterMap: createCharacterIndexMap(2, charsToMap)
     }
-  ],
-  reflector: {
-      rotorNumber:-1,
-      position:0,
-      charsToMap: charsToMap,
-      charecterMap: createCharacterIndexMap(-1, charsToMap)
-    },
-  charactersToMap:charsToMap,
-  offsets:[0,0]
-  
-}
+  ]
+
 
 /**
  * rotorNumber: number on rotor used to seed char map
@@ -85,31 +75,16 @@ function App() {
         let rotorCharMap = createCharacterIndexMap(Number(rotorSetup[0]),charsToMap)
         console.log(rotorCharMap)
         let rotor = {
-          rotorNumber: rotorSetup[0],
           position: 0,
-          charsToMap: charsToMap,
-          charecterMap: rotorCharMap
+          characterMap: rotorCharMap,
+          offset: rotorSetup[1]
         }
         rotors.push(rotor)
         console.log(rotor)
       }
     console.log("Rotors:")
     console.log(rotors)
-
-      let rotorArray = {
-        rotorArray:rotors,
-        reflector:  {
-          rotorNumber:-1,
-          position:0,
-          charsToMap: charsToMap,
-          charecterMap: createCharacterIndexMap(-1, charsToMap)
-        },
-        charactersToMap: charsToMap,
-        offsets :initialOffsets
-      }
-    console.log("Output of buildRotorArray:")
-    console.log(rotorArray)
-    setRotorArray(rotorArray)
+    setRotorArray(rotors)
   }
 
   const handleKeyPress = (inputChar) => {
@@ -119,31 +94,29 @@ function App() {
 
     setOutput(output + encodeLetter(rotorArray,inputChar))
 
-    console.log("rotor Array before:")
-    console.log(rotorArray.rotorArray)
-    let newRotorArrayTest = stepRotorsHook3(rotorArray.rotorArray,charsToMap.length)
-    console.log("rotor Array after:")
-    console.log(newRotorArrayTest)
-    let newRotorArray = {...rotorArray,rotorArray:newRotorArrayTest}
-    console.log(newRotorArray.rotorArray)
-   // newRotorArray.rotorArray = rotors
-    console.log(newRotorArray.rotorArray)
+    console.log(getValuesOfKeyFromArray(rotorArray,"offset"))
+    
+    stepRotorsHook4(rotorArray)
 
-    setRotorArray(newRotorArray)
-    
-    
+
   }
 
 
   const toggleRotorMenu = () => setRotorSelectIsOpen(! rotorSelectIsOpen)
   
 
-  const resetOffsets = () => setInitialOffsets(initialOffsets)
+  const reset = () => {
+    console.log("Reset pos called")
+    console.log(rotorArray)
+    resetPositions(rotorArray)
+  console.log(rotorArray)
+  }
 
 
   const clearDisplay = () => {setInput("");setOutput("")};
 
-  
+  console.log("Rotor Ar")
+  console.log(rotorArray)
   return (
     <div className="App">
       <header className="App-header">
@@ -160,14 +133,11 @@ function App() {
         </div>
         <div style = {{display:"flex", "flex-direction":"row"}}>
            <RotorArray 
-              rotorArray={rotorArray.rotorArray}
-              reflector={rotorArray.reflector}
-              charactersToMap={rotorArray.charactersToMap}
-              offsets={rotorArray.offsets}
+              rotorArray={rotorArray}
             />
           <div className='controlPanel bordered'>
             <h3 style = {{paddingTop:"3px"}}>Control Panel</h3>
-            <div className='controlPanelButton bordered' onClick={resetOffsets}>Reset Rotors</div>
+            <div className='controlPanelButton bordered' onClick={reset}>Reset Rotors</div>
             <div className='controlPanelButton bordered' onClick = {toggleRotorMenu}>Choose Rotors</div>
             <div className='controlPanelButton bordered' onClick={clearDisplay}>Clear Message</div> 
           </div>
