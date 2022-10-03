@@ -3,8 +3,9 @@ import * as rotorbl  from './rotor.bl'
 import {mod} from '../../helpers/math'
 import { positionToChar } from '../../helpers/misc'
 import { reindexArray } from '../../helpers/collections'
+
 export interface RotorProps {
-    charecterMap: Array<number>,
+    characterMap: Array<number>,
     position: number,
     offset: number
 }
@@ -13,15 +14,17 @@ export const buildRotor = (rotorNumber: number, charactersToMap: Array<string>) 
     return rotorbl.createCharacterIndexMap(rotorNumber, charactersToMap)
 }
 
-export function Rotor({charecterMap, position, offset}: RotorProps) {
-
+export function Rotor(props: RotorProps) {
+    console.log("Rendering rotor")
+    console.log(props)
+    console.log(props.characterMap)
     const  rotorSegmentsToShow: number  = 6
     return(
 <>
-            {reindexArray(charecterMap,position).slice(0,rotorSegmentsToShow).map( (letterIndexPair: number, index: number) => {
+            {reindexArray(props.characterMap,props.position).slice(0,rotorSegmentsToShow).map( (letterIndexPair: number, index: number) => {
                 return(
                 <tr key = {index}>
-                    <td key = {index as unknown as string + '_0'}>{(index + position) % charecterMap.length}</td>
+                    <td key = {index as unknown as string + '_0'}>{(index + props.position) % props.characterMap.length}</td>
                 </tr>
                 )
             })

@@ -1,8 +1,9 @@
 import { charToPosition, positionToChar } from "../../helpers/misc";
 import { RotorProps } from "../rotor/rotor";
 import { propogateSignal, stepRotor } from "../rotor/rotor.bl";
-import { RotorArray, RotorArrayProps } from "./rotorArray";
+import { RotorArray} from "./rotorArray";
 import {deepCopy, mod } from "../../helpers/math";
+import {getValuesOfKeyFromArray} from "../../helpers/collections"
 
 
     /**
@@ -12,7 +13,7 @@ import {deepCopy, mod } from "../../helpers/math";
 export const stepRotorsHook2 = (offsets: Array<number>, rotorSize: number): Array<number> => {
         const stepSize: number = 1
 
-        //console.log("Off in" + offsets)
+        console.log("Off in" + offsets)
         let newOffsets: Array<number> =  [];
 
 
@@ -29,8 +30,8 @@ export const stepRotorsHook2 = (offsets: Array<number>, rotorSize: number): Arra
         })
     } catch {}
 
-        //console.log("Rotors out:")
-        //console.log(offsets)
+        console.log("Off out:")
+        console.log(offsets)
 
         return offsets;
     };
@@ -77,8 +78,6 @@ export const stepRotorsHook3 = (rotorArray: RotorProps[], rotorSize: number): Ro
            return newRotor 
         })
 
-
-       
         let newTestArray3 = newRotors
         console.log("nta3")
         console.log(newRotors)
@@ -92,34 +91,35 @@ export function resetRotorArray(currentOffsets: Array<number>): Array<number> {
 }
 
 
-export function encodeLetter(rotorArray: RotorArrayProps, inputLetter: string) {
+export function encodeLetter(rotorArray: RotorProps[], inputLetter: string) {
     //convert letter to index
     let inputSignal: number = charToPosition(inputLetter)
     //PAss index through each rotor
     //console.log("Begin Letter Encoding ---------------------------------")
+    
 
-    let signalAfterFirstPass: number = performEncryptionPass(rotorArray.rotorArray,inputSignal,true);   
+    let signalAfterFirstPass: number = performEncryptionPass(rotorArray,inputSignal,true);   
     //let signalAfterReflector: number = performEncryptionPass([rotorArray.reflector],signalAfterFirstPass,true)
 
-    const reflect = (signal: number): number =>  rotorArray.charactersToMap.length - signal
+    const reflect = (signal: number): number =>  rotorArray[0].characterMap.length - signal
 
     //@ts-ignore
     let signalAfterReflector: number = reflect(signalAfterFirstPass)
     //console.log("Reflector I/O: " + signalAfterFirstPass + "/" + signalAfterReflector )
-    let signalAfterSecondPass: number = performEncryptionPass(rotorArray.rotorArray,signalAfterReflector,false);  
+    let signalAfterSecondPass: number = performEncryptionPass(rotorArray,signalAfterReflector,false);  
     //console.log("Signals: " + inputSignal + "," + signalAfterFirstPass + "," + signalAfterReflector + "," + signalAfterSecondPass)
     return positionToChar(signalAfterSecondPass)
     
 
-    function performEncryptionPass(rotors: Array<RotorProps>,signal: number,isFirstPass: boolean) {
+    function performEncryptionPass(rotorArray: RotorProps[],signal: number,isFirstPass: boolean) {
         //console.log("Performing Encryption pass")
-        //console.log(rotors)
-        console.log(isFirstPass ? "First Pass-----------------" : "Second Pass--------------")
-        console.log("Rotors:" + rotors)
-        for (let rotor of isFirstPass ? rotors : rotors.slice().reverse()) {
+        //console.log(characterMaps)
+        //console.log(isFirstPass ? "First Pass-----------------" : "Second Pass--------------")
+        //console.log("Rotors:" + characterMaps)
+        for (let rotor of isFirstPass ? rotorArray : rotorArray.slice().reverse()) {
             //console.log("Character Map:" + rotor.charecterMap)
             
-            signal = propogateSignal(signal, rotor.position, isFirstPass, rotor.charecterMap);
+            signal = propogateSignal(signal, rotor.position, isFirstPass, rotor.characterMap);
         }
         return signal
     }
