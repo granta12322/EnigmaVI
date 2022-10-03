@@ -135,11 +135,11 @@ export function propogateSignal(inputPosition: number,
 
     
     let outputIndex = isFirstPass ? rotorMapping[netPositionInRotor] : rotorMapping.indexOf(netPositionInRotor)
-    console.log("NPR: " + netPositionInRotor )
-    console.log("F/B: " + rotorMapping[netPositionInRotor]+ "/" + rotorMapping.indexOf(netPositionInRotor))
+    // console.log("NPR: " + netPositionInRotor )
+    // console.log("F/B: " + rotorMapping[netPositionInRotor]+ "/" + rotorMapping.indexOf(netPositionInRotor))
     
-    console.log("I/O: " + inputPosition + "/" + outputIndex);
-    console.log("")
+    // console.log("I/O: " + inputPosition + "/" + outputIndex);
+    // console.log("")
     //console.log("Subtracting: "+positionChange)
     let outputRotorLocation = outputIndex
 

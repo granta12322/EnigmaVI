@@ -15,9 +15,7 @@ export const buildRotor = (rotorNumber: number, charactersToMap: Array<string>) 
 }
 
 export function Rotor(props: RotorProps) {
-    console.log("Rendering rotor")
-    console.log(props)
-    console.log(props.characterMap)
+
     const  rotorSegmentsToShow: number  = 6
     return(
 <>

@@ -30,23 +30,22 @@ export function RotorArray(props: RotorProps[] ) {
     
     
     //<Rotor {...rotor} />  // ? Deserialise props like this
-    console.log("Rotor Array:" + props)
-    //@ts-ignore
-    console.log(props.rotorArray)
+
+
     return (
-
-        <table className='rotor'>
+        <div className="rotorArray bordered">
+                
+            <table className="rotor">
             
-        {//@ts-ignore
-        props.rotorArray.map((rotor: RotorProps, index: number) => {
-            console.log("Props:" + rotor)
-            console.log(rotor)
-            //console.log(rotor[1].toString())
-        
+                {//@ts-ignore
+                props.rotorArray.map((rotor: RotorProps, index: number) => {
+                    //console.log(rotor[1].toString())
+                
 
-        return (<><th>{index}</th><Rotor  {...rotor}/></>)
-
-    })}
-        </table>
+                    return (<><th>{index}</th><Rotor  {...rotor}/></>)
+                })
+            }
+            </table>
+        </div>        
         );
     }
