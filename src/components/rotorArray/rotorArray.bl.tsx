@@ -36,58 +36,32 @@ export const stepRotorsHook2 = (offsets: Array<number>, rotorSize: number): Arra
         return offsets;
     };
 
-export const stepRotorsHook3 = (rotorArray: RotorProps[], rotorSize: number): RotorProps[] => {
-        const stepSize: number = 1
-    console.log("Checking stepRotorsHook3")
-        console.log("Off in")
-        console.log(rotorArray)
+export const stepRotorsHook4 = (rotorArray: RotorProps[] ) => {
+    const rotorSize: number = rotorArray[0].characterMap.length
+    const stepSize: number = 1
+    console.log("\nStep Rotors 4 in")
+    console.log(getValuesOfKeyFromArray(rotorArray,"position"))
+    try {
+    rotorArray.forEach((rotor,rotorIndex,rotorArray) => {
+        //@ts-ignore
+        let newPosition = stepRotor(rotor.position,stepSize,rotorSize) 
+        rotorArray[rotorIndex].position = newPosition
+        //console.log("Stepping")
+        //console.log(stepRotor(offset,stepSize,rotorSize) )
+        if (newPosition != 0) { throw "exception" ;}  // Rotate next rotor only when start of preceeding is reached.
+    })
+    } catch {}
+    console.log("\nStep Rotors 4 out")
+    console.log(getValuesOfKeyFromArray(rotorArray,"position"))
+}
 
-        // ? Modifying array elements in place
-        let skipFlag: boolean = false;
-
-        let testArray = [
-            {pos:1},
-            {pos:2},
-            {pos:3}
-        ]
-        let newTestArray = rotorArray.map(rotor => {
-            let newElement = {...rotor, position: stepRotor(rotor.position,stepSize,rotorSize) }
-            
-            return newElement
-        })
-        let newTestArray2 = deepCopy(newTestArray)
-
-        let newRotors = rotorArray.map((rotor:RotorProps,index) => {
-
-            let newRotor: any;
-            if(skipFlag === false) {
-
-                console.log("Stepping", index)
-                let newPosition: number = stepRotor(rotor.position,stepSize,rotorSize)
-                if (rotor.position === 0) skipFlag = true;
-
-                newRotor = {...rotor, position: newPosition }
-                console.log(newRotor)
-
-            }
-            else {
-                console.log("Stepping wihtout change", index)
-                console.log(rotor)
-                newRotor =  {...rotor}
-            }
-           return newRotor 
-        })
-
-        let newTestArray3 = newRotors
-        console.log("nta3")
-        console.log(newRotors)
-        console.log(newTestArray2)
-        console.log(newTestArray3)
-        return newRotors;
-    };
-
-export function resetRotorArray(currentOffsets: Array<number>): Array<number> {
-    return currentOffsets.map((element) => element =  0)
+export function resetPositions(rotors: RotorProps[]) {
+    
+    //console.log(rotors)
+    rotors.forEach((rotor,index,rotors) =>{
+        //console.log("Resetting rotor")
+        rotors[index].position = 0
+    })
 }
 
 
