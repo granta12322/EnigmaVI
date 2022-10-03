@@ -37,11 +37,11 @@ export function RotorArray({rotorArray, offsets}: RotorArrayProps ) {
     
     //<Rotor {...rotor} />  // ? Deserialise props like this
     console.log("Rendering Rotor Array")
-    console.log(rotorArray)
     console.log(offsets)
     let rotorsAndOffsets = zip(rotorArray,offsets)
     return (
         <div className="rotorArray bordered">
+            
         {rotorsAndOffsets.map((rotor:Array<any>, index: number) => {
             //console.log("RAO:" + rotor[0]["position"])
             //console.log(rotor[1].toString())
