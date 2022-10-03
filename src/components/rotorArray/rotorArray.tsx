@@ -40,16 +40,17 @@ export function RotorArray({rotorArray, offsets}: RotorArrayProps ) {
     console.log(offsets)
     let rotorsAndOffsets = zip(rotorArray,offsets)
     return (
-        <div className="rotorArray bordered">
+
+        <table className='rotor'>
             
         {rotorsAndOffsets.map((rotor:Array<any>, index: number) => {
             //console.log("RAO:" + rotor[0]["position"])
             //console.log(rotor[1].toString())
         rotor[0]["position"] = rotor[1]
 
-        return <Rotor  {...rotor[0]} index= {index}
-        />
+        return (<><th>{index}</th><Rotor  {...rotor[0]}/></>)
+
     })}
-        </div>
+        </table>
         );
     }
