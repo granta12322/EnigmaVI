@@ -18,7 +18,7 @@ export function KeyBoard(props: KeyBoardProps) {
       <div className='keyBoard' >
       { 
         props.characterRows.map((row,i) => {
-          return <KeyBoardRow key={i} characters={row} handleKeyPress ={(character: string) =>props.handleKeyPress(character)}/>
+          return <KeyBoardRow key={i} characters={row} handleKeyPress ={props.handleKeyPress}/>
   })
       }
     </div>);

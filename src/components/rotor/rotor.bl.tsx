@@ -3,11 +3,6 @@ import { deepCopy, randIntBetween, mod } from "../../helpers/math";
 const LEFT_LETTER_POSITION: number = 0;
 const RIGHT_LETTER_POSITION: number = 1;
 
-export const buildRotor = (rotorNumber: number, charactersToMap: Array<string>) => {
-    //console.log("Building rotor with chars: " +charactersToMap)
-    return createCharacterIndexMap(rotorNumber, charactersToMap)
-}
-
 
 
 export function createCharacterIndexMap(rotorNumber: number, characters: Array<string>): Array<number> {
@@ -21,7 +16,7 @@ export function createCharacterIndexMap(rotorNumber: number, characters: Array<s
     let alreadyChosenIndexes: Array<number> = [];
     
     let i: number = 0;
-    console.log("Creating Rotor Map")
+    //console.log("Creating Rotor Map")
     for (let i: number = 0; i < letterCount; i++) {   
         //@ts-ignore
         let outputIndex = selectIndexPair(i, availableOutputs) ;
@@ -36,7 +31,7 @@ export function createCharacterIndexMap(rotorNumber: number, characters: Array<s
 
     
      
-    console.log("Charmap:" + letterMapping)
+    //console.log("Charmap:" + letterMapping)
     //console.log("Charmap sum: " + letterMapping.reduce((partialSum,a) => partialSum + a))
 
 
@@ -140,11 +135,11 @@ export function propogateSignal(inputPosition: number,
 
     
     let outputIndex = isFirstPass ? rotorMapping[netPositionInRotor] : rotorMapping.indexOf(netPositionInRotor)
-    console.log("NPR: " + netPositionInRotor )
-    console.log("F/B: " + rotorMapping[netPositionInRotor]+ "/" + rotorMapping.indexOf(netPositionInRotor))
+    // console.log("NPR: " + netPositionInRotor )
+    // console.log("F/B: " + rotorMapping[netPositionInRotor]+ "/" + rotorMapping.indexOf(netPositionInRotor))
     
-    console.log("I/O: " + inputPosition + "/" + outputIndex);
-    console.log("")
+    // console.log("I/O: " + inputPosition + "/" + outputIndex);
+    // console.log("")
     //console.log("Subtracting: "+positionChange)
     let outputRotorLocation = outputIndex
 

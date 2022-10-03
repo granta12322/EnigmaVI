@@ -1,7 +1,6 @@
 export function getValuesOfKeyFromArray(array:Array<any>, key: string): Array<any> {
     let result: Array<any> = [];
     array.map((element) => {
-        console.log("element to add:" + element[key])
         result.push(element[key]) 
     }
     )
