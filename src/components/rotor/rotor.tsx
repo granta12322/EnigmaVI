@@ -22,7 +22,7 @@ export function Rotor(props: RotorProps) {
             {reindexArray(props.characterMap,props.position).slice(0,rotorSegmentsToShow).map( (letterIndexPair: number, index: number) => {
                 return(
                 <tr key = {index}>
-                    <td key = {index as unknown as string + '_0'}>{(index + props.position) % props.characterMap.length}</td>
+                    <td key = {index as unknown as string + '_0'}>{(index + props.position + props.offset) % props.characterMap.length}</td>
                 </tr>
                 )
             })

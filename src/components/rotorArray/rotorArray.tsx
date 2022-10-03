@@ -35,14 +35,14 @@ export function RotorArray(props: RotorProps[] ) {
     return (
         <div className="rotorArray bordered">
                 
-            <table className="rotor">
+            <table className="rotorArray">
             
                 {//@ts-ignore
                 props.rotorArray.map((rotor: RotorProps, index: number) => {
                     //console.log(rotor[1].toString())
                 
 
-                    return (<><th>{index}</th><Rotor  {...rotor}/></>)
+                    return (<><th className="rotor">{index}<Rotor  {...rotor}/></th></>)
                 })
             }
             </table>
